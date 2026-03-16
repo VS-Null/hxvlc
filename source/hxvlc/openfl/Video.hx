@@ -312,8 +312,8 @@ class Video extends openfl.display.Bitmap
 	/** Indicates whether pausing is supported. */
 	public var canPause(get, never):Bool;
 
-	/** Volume level (0 to 100). */
-	public var volume(get, set):Int;
+	/** Volume level (0.0 to 1.0). */
+	public var volume(get, set):Float;
 
 	/** Role of the media. */
 	public var role(get, set):UInt;
@@ -1069,21 +1069,21 @@ class Video extends openfl.display.Bitmap
 	}
 
 	@:noCompletion
-	private function get_volume():Int
+	private function get_volume():Float
 	{
 		#if lime_openal
-		return alSource != null ? Math.floor(AL.getSourcef(alSource, AL.GAIN) * 100) : -1;
+		return alSource != null ? AL.getSourcef(alSource, AL.GAIN) : -1;
 		#else
 		return -1;
 		#end
 	}
 
 	@:noCompletion
-	private function set_volume(value:Int):Int
+	private function set_volume(value:Float):Float
 	{
 		#if lime_openal
 		if (alSource != null)
-			AL.sourcef(alSource, AL.GAIN, Math.abs(value / 100));
+			AL.sourcef(alSource, AL.GAIN, value);
 		#end
 
 		return value;
